@@ -1,6 +1,4 @@
-data "aws_region" "current" {
-  provider = aws.region
-}
+data "aws_region" "current" {}
 
 module "s3_bucket" {
   source = "./modules/s3"
