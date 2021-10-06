@@ -1,0 +1,34 @@
+
+variable "ecr_prefix" {
+  default     = ""
+}
+
+variable "tags" {
+  default     = {}
+}
+
+resource "aws_ecr_repository" "ecr_repo" {
+  name                 = "${var.ecr_prefix}-weather-app"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
+  tags = var.tags
+
+}
+
+resource "aws_ssm_parameter" "save_ecr_repo_url" {
+  name  = "${var.project_prefix}-weather-ecr-url"
+  type  = "String"
+  value = aws_ecr_repository.ecr_repo.repository_url
+
+  tags = var.tags
+
+}
+
+output "ecr_repo_url" {
+  description = "ECR Repo URL"
+  value       = aws_ecr_repository.ecr_repo.repository_url
+}

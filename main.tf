@@ -19,9 +19,9 @@ module network {
   private_subnet_cidr_blocks  = var.private_subnet_cidr_blocks
 }
 
-module "s3_bucket" {
-  source = "./modules/s3"
-  bucket = var.bucket
+module "ecr_repo" {
+  source      = "./modules/ecr"
+  ecr_prefix  = local.project_prefix
 
   tags = var.tags
 }
