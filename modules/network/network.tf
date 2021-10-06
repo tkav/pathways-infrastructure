@@ -40,7 +40,7 @@ variable "public_subnet_cidr_blocks" {
 variable "private_subnet_cidr_blocks" {
   description = "Available cidr blocks for private subnets"
   type        = list(string)
-  default     = ["10.0.101.0/26"]
+  default     = ["10.0.1.64/26"]
 }
 
 data "aws_availability_zones" "available" {
