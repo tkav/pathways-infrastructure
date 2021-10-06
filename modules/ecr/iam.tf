@@ -1,6 +1,6 @@
 
 resource "aws_iam_role" "ecr_role" {
-  name = "${var.ecr_prefix}-ecr-role"
+  name = "${var.ecr_prefix}EcsExecutionRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
