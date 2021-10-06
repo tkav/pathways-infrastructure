@@ -19,12 +19,9 @@ module network {
   private_subnet_cidr_blocks  = var.private_subnet_cidr_blocks
 }
 
-output "bucket_name" {
-  description = "The name of the bucket"
-  value       = ["${module.s3_bucket.s3_bucket_name}"]
-}
+module "s3_bucket" {
+  source = "./modules/s3"
+  bucket = var.bucket
 
-output "bucket_name_arn" {
-  description = "The name of the bucket"
-  value       = ["${module.s3_bucket.s3_bucket_name_arn}"]
+  tags = var.tags
 }
