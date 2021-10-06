@@ -21,7 +21,7 @@ module network {
 
 module "ecr_repo" {
   source      = "./modules/ecr"
-  ecr_prefix  = local.project_prefix
+  ecr_prefix  = local.author_username
 
   tags = var.tags
 }

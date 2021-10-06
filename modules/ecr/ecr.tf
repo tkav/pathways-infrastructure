@@ -8,7 +8,7 @@ variable "tags" {
 }
 
 resource "aws_ecr_repository" "ecr_repo" {
-  name                 = "${var.ecr_prefix}-weather-app"
+  name                 = "${var.ecr_prefix}-node-weather-app"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
