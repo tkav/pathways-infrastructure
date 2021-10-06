@@ -1,12 +1,4 @@
 
-variable "ecr_prefix" {
-  default     = ""
-}
-
-variable "tags" {
-  default     = {}
-}
-
 resource "aws_ecr_repository" "ecr_repo" {
   name                 = "${var.ecr_prefix}-node-weather-app"
   image_tag_mutability = "MUTABLE"
@@ -20,7 +12,7 @@ resource "aws_ecr_repository" "ecr_repo" {
 }
 
 resource "aws_ssm_parameter" "save_ecr_repo_url" {
-  name  = "${var.project_prefix}-weather-ecr-url"
+  name  = "${var.ecr_prefix}-weather-ecr-url"
   type  = "String"
   value = aws_ecr_repository.ecr_repo.repository_url
 
