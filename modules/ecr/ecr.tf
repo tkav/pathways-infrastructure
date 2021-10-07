@@ -12,7 +12,7 @@ resource "aws_ecr_repository" "ecr_repo" {
 }
 
 resource "aws_ssm_parameter" "save_ecr_repo_url" {
-  name  = "${var.ecr_prefix}-weather-ecr-url"
+  name  = "/${var.ecr_prefix}/node-weather-app/ecr-repo-url"
   type  = "String"
   value = aws_ecr_repository.ecr_repo.repository_url
 
