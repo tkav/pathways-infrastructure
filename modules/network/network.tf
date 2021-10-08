@@ -124,3 +124,52 @@ resource "aws_route_table_association" "private" {
   depends_on = [aws_subnet.private_subnet, aws_route_table.private]
 
 }
+
+resource "aws_security_group" "weather_app_alb_sg" {
+  name        = "weather-app-alb-sg"
+  description = "weather-app-alb-sg"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress = [
+    {
+      description      = "HTTP"
+      from_port        = 80
+      to_port          = 80
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      security_groups  = []
+      self = false
+    }
+  ]
+
+  tags = {
+    Name = "weather-app-alb-sg"
+  }
+}
+
+resource "aws_security_group" "weather-app-ecs-sg" {
+  name        = "weather-app-ecs-sg"
+  description = "weather-app-ecs-sg"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress = [
+    {
+      description      = "HTTP"
+      from_port        = 80
+      to_port          = 80
+      protocol         = "tcp"
+      security_groups  = aws_security_group.weather_app_alb_sg.id
+      cidr_blocks      = []
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      security_groups  = []
+      self = false
+    }
+  ]
+
+  tags = {
+    Name = "weather-app-ecs-sg"
+  }
+}
