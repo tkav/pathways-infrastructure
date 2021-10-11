@@ -7,7 +7,7 @@ module "s3_bucket" {
   tags = var.tags
 }
 
-module network {
+module "network" {
   source                      = "./modules/network"
   aws_region                  = data.aws_region.current.name
   project_prefix              = local.project_prefix
@@ -22,6 +22,19 @@ module network {
 module "ecr_repo" {
   source      = "./modules/ecr"
   ecr_prefix  = local.author_username
+
+  tags = var.tags
+}
+
+module "alb" {
+  source          = "./modules/alb"
+  name_prefix     = local.author_username
+  vpc_id          = module.network.vpc_id
+  alb_sg_id       = module.network.alb_sg_id
+  public_subnets  = module.network.public_subnets
+  log_bucket      = module.s3_bucket.s3_bucket_name
+
+  depends_on = [module.network, module.s3_bucket]
 
   tags = var.tags
 }
