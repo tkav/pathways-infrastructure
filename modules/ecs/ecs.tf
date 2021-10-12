@@ -2,7 +2,6 @@
 locals {
   container_definitions = templatefile("${path.module}/container-definition.json", {
     ecr-repo-uri        = var.ecr_repo_uri
-    execution-role-arn  = var.ecs_iam_role_id
   })
 }
 
@@ -16,24 +15,31 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 resource "aws_ecs_task_definition" "task_definition" {
     family                  = "${var.name_prefix}-weather-app-fam"
     container_definitions   = local.container_definitions
+
+    memory  = var.memory
+    cpu     = var.cpu
+
+    requires_compatibilities = [
+      "FARGATE"
+    ]
+  
+    network_mode       = "awsvpc"
+    execution_role_arn = var.ecs_iam_role_id
+
 }
 
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.name_prefix}-weather-app-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.task_definition.arn
-  desired_count   = 1
+  desired_count   = var.desired_count
   iam_role        = var.ecs_iam_role_id
 
   depends_on = [aws_ecs_task_definition.task_definition]
 
   network_configuration {
-      subnets = var.private_subnets
-  }
-
-  ordered_placement_strategy {
-    type  = "binpack"
-    field = "cpu"
+      subnets         = var.private_subnets
+      security_groups = [var.ecs_sg_id]
   }
 
   load_balancer {

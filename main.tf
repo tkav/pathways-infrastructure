@@ -45,7 +45,12 @@ module "ecs" {
   ecr_repo_uri        = module.ecr_repo.ecr_repo_url
   ecs_iam_role_id     = module.ecr_repo.ecr_iam_policy_id
   lb_target_group_arn = module.alb.lb_target_group_arn
+  ecs_sg_id           = module.network.ecs_sg_id
   private_subnets     = slice(module.network.private_subnets, 0, 1)
+
+  desired_count = 1
+  memory        = 512
+  cpu           = 256
 
   depends_on = [module.ecr_repo]
 

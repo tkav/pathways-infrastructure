@@ -15,9 +15,25 @@ variable "lb_target_group_arn" {
   default     = ""
 }
 
+variable "ecs_sg_id" {
+  default     = ""
+}
+
 variable "private_subnets" {
   type        = list
   default     = []
+}
+
+variable "desired_count" {
+  type     = number
+}
+
+variable "memory" {
+  type     = number
+}
+
+variable "cpu" {
+  type     = number
 }
 
 variable "tags" {
