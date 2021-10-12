@@ -15,7 +15,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 resource "aws_ecs_task_definition" "task_definition" {
     family                  = "${var.name_prefix}-weather-app-fam"
-    container_definitions   = local.container_definitions
+    container_definitions   = "${local.container_definitions}"
 }
 
 resource "aws_ecs_service" "ecs_service" {
