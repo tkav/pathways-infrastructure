@@ -16,7 +16,7 @@ variable "lb_target_group_arn" {
 }
 
 variable "private_subnets" {
-  default     = ""
+  default     = []
 }
 
 variable "tags" {

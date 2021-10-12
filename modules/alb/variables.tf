@@ -12,7 +12,7 @@ variable "alb_sg_id" {
 }
 
 variable "public_subnets" {
-  default     = ""
+  default     = []
 }
 
 variable "log_bucket" {
