@@ -12,7 +12,8 @@ variable "alb_sg_id" {
 }
 
 variable "public_subnets" {
-  default     = []
+  type        = list(string)
+  default     = ""
 }
 
 variable "log_bucket" {
