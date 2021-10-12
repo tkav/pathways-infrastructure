@@ -31,7 +31,7 @@ module "alb" {
   name_prefix     = local.author_username
   vpc_id          = module.network.vpc_id
   alb_sg_id       = module.network.alb_sg_id
-  public_subnets  = module.network.public_subnets
+  public_subnets  = slice(module.network.public_subnets, 0, 1)
   log_bucket      = module.s3_bucket.s3_bucket_name
 
   depends_on = [module.network, module.s3_bucket]
