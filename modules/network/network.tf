@@ -149,7 +149,7 @@ resource "aws_security_group" "weather_app_alb_sg" {
   }
 }
 
-resource "aws_security_group" "weather-app-ecs-sg" {
+resource "aws_security_group" "weather_app_ecs_sg" {
   name        = "weather-app-ecs-sg"
   description = "weather-app-ecs-sg"
   vpc_id      = aws_vpc.vpc.id
