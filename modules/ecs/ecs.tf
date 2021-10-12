@@ -24,7 +24,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     ]
   
     network_mode       = "awsvpc"
-    execution_role_arn = var.ecs_iam_role_id
+    execution_role_arn = var.ecs_iam_role_arn
 
 }
 
@@ -33,7 +33,7 @@ resource "aws_ecs_service" "ecs_service" {
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.task_definition.arn
   desired_count   = var.desired_count
-  iam_role        = var.ecs_iam_role_id
+  iam_role        = var.ecs_iam_role_arn
 
   depends_on = [aws_ecs_task_definition.task_definition]
 

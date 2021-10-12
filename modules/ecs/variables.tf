@@ -7,7 +7,7 @@ variable "ecr_repo_uri" {
   default     = ""
 }
 
-variable "ecs_iam_role_id" {
+variable "ecs_iam_role_arn" {
   default     = ""
 }
 
@@ -25,15 +25,15 @@ variable "private_subnets" {
 }
 
 variable "desired_count" {
-  type     = number
+  type        = number
 }
 
 variable "memory" {
-  type     = number
+  type        = number
 }
 
 variable "cpu" {
-  type     = number
+  type        = number
 }
 
 variable "tags" {

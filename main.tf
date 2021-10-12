@@ -43,7 +43,7 @@ module "ecs" {
   source              = "./modules/ecs"
   name_prefix         = local.author_username
   ecr_repo_uri        = module.ecr_repo.ecr_repo_url
-  ecs_iam_role_id     = module.ecr_repo.ecr_iam_policy_id
+  ecs_iam_role_arn    = module.ecr_repo.ecr_iam_role_arn
   lb_target_group_arn = module.alb.lb_target_group_arn
   ecs_sg_id           = module.network.ecs_sg_id
   private_subnets     = slice(module.network.private_subnets, 0, 1)
