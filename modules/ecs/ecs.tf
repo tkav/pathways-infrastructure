@@ -1,11 +1,4 @@
 
-locals {
-  container_definitions = templatefile("${path.module}/container-definition.json", {
-    ecr-repo-uri        = var.ecr_repo_uri
-    execution-role-arn  = var.ecs_iam_role_id
-  })
-}
-
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.name_prefix}-weather-app-cluster"
 
@@ -15,7 +8,25 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 resource "aws_ecs_task_definition" "task_definition" {
     family                  = "${var.name_prefix}-weather-app-fam"
-    container_definitions   = "${local.container_definitions}"
+    container_definitions   = jsonencode([
+        {
+            "name": "weather-app",
+            "image": "${var.ecr_repo_uri}:latest",
+            "portMappings": [
+                {
+                    "protocol": "tcp",
+                    "containerPort": 3000
+                }
+            ],
+            "memory": "512",
+            "cpu": "256",
+            "requiresCompatibilities": [
+            "FARGATE"
+            ],
+            "networkMode": "awsvpc",
+            "executionRoleArn": "${var.ecs_iam_role_id}"
+        }
+    ])
 }
 
 resource "aws_ecs_service" "ecs_service" {
