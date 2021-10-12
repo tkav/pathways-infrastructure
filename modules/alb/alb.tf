@@ -14,8 +14,8 @@ resource "aws_lb" "alb" {
   name               = "${var.name_prefix}-weather-app-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = slice(var.alb_sg_id, 0, 2)
-  subnets            = [var.public_subnets]
+  security_groups    = [var.alb_sg_id]
+  subnets            = slice(var.public_subnets, 0, 2)
 
   enable_deletion_protection = true
 
@@ -39,6 +39,9 @@ resource "aws_lb_listener" "alb_listener" {
     target_group_arn = aws_lb_target_group.target_group.arn
   }
 
-  tags = var.tags
+}
 
+output "lb_target_group_arn" {
+  description = "Target Group ARN"
+  value       = aws_lb_target_group.target_group.arn
 }
