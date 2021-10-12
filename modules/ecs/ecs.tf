@@ -28,7 +28,7 @@ resource "aws_ecs_service" "ecs_service" {
   depends_on = [aws_ecs_task_definition.task_definition]
 
   network_configuration {
-      subnets = var.private_subnets
+      subnets = tolist(var.private_subnets)
   }
 
   ordered_placement_strategy {
