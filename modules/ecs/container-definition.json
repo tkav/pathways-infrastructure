@@ -1,0 +1,19 @@
+[
+    {
+        "name": "weather-app",
+        "image": "${ecr-repo-uri}:latest",
+        "portMappings": [
+            {
+                "protocol": "tcp",
+                "containerPort": 3000
+            }
+        ],
+        "memory": "512",
+        "cpu": "256",
+        "requiresCompatibilities": [
+        "FARGATE"
+        ],
+        "networkMode": "awsvpc",
+        "executionRoleArn": "${execution-role-arn}"
+    }
+]

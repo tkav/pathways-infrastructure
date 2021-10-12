@@ -38,3 +38,16 @@ module "alb" {
 
   tags = var.tags
 }
+
+module "ecs" {
+  source              = "./modules/ecs"
+  name_prefix         = local.author_username
+  ecr_repo_uri        = module.ecr_repo.ecr_repo_url
+  ecs_iam_role_id     = module.ecr_repo.ecr_iam_policy_id
+  lb_target_group_arn = module.alb.lb_target_group_arn
+  private_subnets     = module.network.private_subnets
+
+  depends_on = [module.ecr_repo]
+
+  tags = var.tags
+}
