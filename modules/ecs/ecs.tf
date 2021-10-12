@@ -1,4 +1,11 @@
 
+locals {
+  container_definitions = templatefile("${path.module}/container-definition.json", {
+    ecr-repo-uri        = var.ecr_repo_uri
+    execution-role-arn  = var.ecs_iam_role_id
+  })
+}
+
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.name_prefix}-weather-app-cluster"
 
@@ -6,19 +13,9 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 }
 
-# data "template_file" "container_definitions_file" {
-#   templatefile = {file("container-definition.json"),
-#   { ecr-repo-uri                = var.ecr_repo_uri
-#     ecr-repo-execution-role-arn = var.ecs_iam_role_arn
-#   }
-# }
-
 resource "aws_ecs_task_definition" "task_definition" {
     family                  = "${var.name_prefix}-weather-app-fam"
-    container_definitions   = file(templatefile("${path.module}/container-definition.json", 
-    {   ecr-repo-uri        = var.ecr_repo_uri
-        execution-role-arn  = var.ecs_iam_role_id
-    }))
+    container_definitions   = local.container_definitions
 }
 
 resource "aws_ecs_service" "ecs_service" {
