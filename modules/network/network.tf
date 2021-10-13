@@ -113,7 +113,7 @@ resource "aws_route" "private_routes" {
   count                     = var.private_subnet_count
   route_table_id            = aws_route_table.private[count.index].id
   destination_cidr_block    = "0.0.0.0/0"
-  gateway_id                = aws_nat_gateway.natgw[count.index].id
+  nat_gateway_id            = aws_nat_gateway.natgw[count.index].id
 }
 
 resource "aws_route_table_association" "private" {
@@ -144,6 +144,20 @@ resource "aws_security_group" "weather_app_alb_sg" {
     }
   ]
 
+  egress = [
+    {
+      description      = ""
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      security_groups  = []
+      self = false
+    }
+  ]
+
   tags = {
     Name = "weather-app-alb-sg"
   }
@@ -156,18 +170,33 @@ resource "aws_security_group" "weather_app_ecs_sg" {
 
   ingress = [
     {
-      description      = "HTTP"
-      from_port        = 80
-      to_port          = 80
+      description      = "ECS"
+      from_port        = 3000
+      to_port          = 3000
       protocol         = "tcp"
-      security_groups  = aws_security_group.weather_app_alb_sg.id
+      security_groups  = [aws_security_group.weather_app_alb_sg.id]
       cidr_blocks      = []
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      self = false
+    }
+  ]
+
+  egress = [
+    {
+      description      = ""
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = []
       prefix_list_ids  = []
       security_groups  = []
       self = false
     }
   ]
+
+  depends_on = [aws_security_group.weather_app_alb_sg]
 
   tags = {
     Name = "weather-app-ecs-sg"

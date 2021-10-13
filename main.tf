@@ -31,7 +31,7 @@ module "alb" {
   name_prefix     = local.author_username
   vpc_id          = module.network.vpc_id
   alb_sg_id       = module.network.alb_sg_id
-  public_subnets  = slice(module.network.public_subnets, 0, 1)
+  public_subnets  = slice(module.network.public_subnets, 0, 2)
   log_bucket      = module.s3_bucket.s3_bucket_name
 
   depends_on = [module.network, module.s3_bucket]
@@ -46,7 +46,7 @@ module "ecs" {
   ecs_iam_role_arn    = module.ecr_repo.ecr_iam_role_arn
   lb_target_group_arn = module.alb.lb_target_group_arn
   ecs_sg_id           = module.network.ecs_sg_id
-  private_subnets     = slice(module.network.private_subnets, 0, 1)
+  private_subnets     = slice(module.network.private_subnets, 0, 2)
 
   desired_count = 1
   memory        = 512

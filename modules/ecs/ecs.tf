@@ -1,7 +1,9 @@
 
 locals {
   container_definitions = templatefile("${path.module}/container-definition.json", {
+    name_prefix         = var.name_prefix
     ecr-repo-uri        = var.ecr_repo_uri
+    execution-role-arn  = var.ecs_iam_role_arn
   })
 }
 
@@ -24,6 +26,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     ]
   
     network_mode       = "awsvpc"
+    task_role_arn      = var.ecs_iam_role_arn
     execution_role_arn = var.ecs_iam_role_arn
 
 }
@@ -32,8 +35,8 @@ resource "aws_ecs_service" "ecs_service" {
   name            = "${var.name_prefix}-weather-app-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.task_definition.arn
+  launch_type     = "FARGATE"
   desired_count   = var.desired_count
-  iam_role        = var.ecs_iam_role_arn
 
   depends_on = [aws_ecs_task_definition.task_definition]
 
