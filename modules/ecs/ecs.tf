@@ -1,4 +1,12 @@
 
+locals {
+  container_definitions = templatefile("${path.module}/container-definition.json", {
+    name_prefix         = var.name_prefix
+    ecr-repo-uri        = var.ecr_repo_uri
+    execution-role-arn  = var.ecs_iam_role_arn
+  })
+}
+
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.name_prefix}-weather-app-cluster"
 
@@ -8,43 +16,33 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 resource "aws_ecs_task_definition" "task_definition" {
     family                  = "${var.name_prefix}-weather-app-fam"
-    container_definitions   = jsonencode([
-        {
-            "name": "weather-app",
-            "image": "${var.ecr_repo_uri}:latest",
-            "portMappings": [
-                {
-                    "protocol": "tcp",
-                    "containerPort": 3000
-                }
-            ],
-            "memory": "512",
-            "cpu": "256",
-            "requiresCompatibilities": [
-            "FARGATE"
-            ],
-            "networkMode": "awsvpc",
-            "executionRoleArn": "${var.ecs_iam_role_id}"
-        }
-    ])
+    container_definitions   = local.container_definitions
+
+    memory  = var.memory
+    cpu     = var.cpu
+
+    requires_compatibilities = [
+      "FARGATE"
+    ]
+  
+    network_mode       = "awsvpc"
+    task_role_arn      = var.ecs_iam_role_arn
+    execution_role_arn = var.ecs_iam_role_arn
+
 }
 
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.name_prefix}-weather-app-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.task_definition.arn
-  desired_count   = 1
-  iam_role        = var.ecs_iam_role_id
+  launch_type     = "FARGATE"
+  desired_count   = var.desired_count
 
   depends_on = [aws_ecs_task_definition.task_definition]
 
   network_configuration {
-      subnets = slice(var.private_subnets, 0, 2)
-  }
-
-  ordered_placement_strategy {
-    type  = "binpack"
-    field = "cpu"
+      subnets         = var.private_subnets
+      security_groups = [var.ecs_sg_id]
   }
 
   load_balancer {
