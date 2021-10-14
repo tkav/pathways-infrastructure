@@ -7,8 +7,8 @@ resource "aws_security_group" "weather_app_ecs_sg" {
   ingress = [
     {
       description      = "ECS"
-      from_port        = 3000
-      to_port          = 3000
+      from_port        = var.port
+      to_port          = var.port
       protocol         = "tcp"
       security_groups  = [var.alb_sg_id]
       cidr_blocks      = []
