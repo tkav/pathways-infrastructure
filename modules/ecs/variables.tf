@@ -3,6 +3,14 @@ variable "name_prefix" {
   default     = ""
 }
 
+variable "aws_region" {
+  default     = ""
+}
+
+variable "cloudwatch_group" {
+  default     = ""
+}
+
 variable "ecr_repo_uri" {
   default     = ""
 }
