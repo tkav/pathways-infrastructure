@@ -3,10 +3,6 @@ resource "aws_ecr_repository" "ecr_repo" {
   name                 = "${var.ecr_prefix}-node-weather-app"
   image_tag_mutability = "MUTABLE"
 
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
   tags = var.tags
 
 }
