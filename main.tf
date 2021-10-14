@@ -1,5 +1,11 @@
 data "aws_region" "current" {}
 
+resource "aws_cloudwatch_log_group" "cloudwatch_group" {
+  name = "${local.project_prefix}"
+
+  tags = var.tags
+}
+
 module "s3_bucket" {
   source = "./modules/s3"
   bucket = var.bucket
@@ -41,10 +47,12 @@ module "alb" {
 module "ecs" {
   source              = "./modules/ecs"
   name_prefix         = local.author_username
+  aws_region          = data.aws_region.current.name
+  cloudwatch_group    = aws_cloudwatch_log_group.cloudwatch_group.id
   ecr_repo_uri        = module.ecr_repo.ecr_repo_url
   ecs_iam_role_arn    = module.ecr_repo.ecr_iam_role_arn
   lb_target_group_arn = module.alb.lb_target_group_arn
-  vpc_id          = module.network.vpc_id
+  vpc_id              = module.network.vpc_id
   alb_sg_id           = module.alb.alb_sg_id
   private_subnets     = slice(module.network.private_subnets, 0, 2)
 
@@ -53,7 +61,7 @@ module "ecs" {
   memory        = 512
   cpu           = 256
 
-  depends_on = [module.ecr_repo, module.alb]
+  depends_on = [module.ecr_repo, module.alb, aws_cloudwatch_log_group.cloudwatch_group]
 
   tags = var.tags
 }
