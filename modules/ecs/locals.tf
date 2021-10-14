@@ -4,5 +4,8 @@ locals {
     name_prefix         = var.name_prefix
     ecr-repo-uri        = var.ecr_repo_uri
     execution-role-arn  = var.ecs_iam_role_arn
+    port                = var.port
+    memory              = var.memory
+    cpu                 = var.cpu
   })
 }

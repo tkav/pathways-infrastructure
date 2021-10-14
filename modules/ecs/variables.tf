@@ -32,6 +32,10 @@ variable "desired_count" {
   type        = number
 }
 
+variable "port" {
+  type        = number
+}
+
 variable "memory" {
   type        = number
 }

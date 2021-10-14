@@ -49,6 +49,7 @@ module "ecs" {
   private_subnets     = slice(module.network.private_subnets, 0, 2)
 
   desired_count = 1
+  port          = 3000
   memory        = 512
   cpu           = 256
 
