@@ -19,8 +19,3 @@ resource "aws_ssm_parameter" "save_ecr_repo_url" {
   tags = var.tags
 
 }
-
-output "ecr_repo_url" {
-  description = "ECR Repo URL"
-  value       = aws_ecr_repository.ecr_repo.repository_url
-}

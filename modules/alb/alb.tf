@@ -38,11 +38,6 @@ resource "aws_security_group" "weather_app_alb_sg" {
   }
 }
 
-output "lb_target_group_arn" {
-  description = "Target Group ARN"
-  value       = aws_lb_target_group.target_group.arn
-}
-
 resource "aws_lb_target_group" "target_group" {
   name        = "${var.name_prefix}-weather-app-tg"
   port        = 3000
