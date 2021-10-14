@@ -7,6 +7,44 @@ locals {
   })
 }
 
+resource "aws_security_group" "weather_app_ecs_sg" {
+  name        = "${var.name_prefix}-weather-app-ecs-sg"
+  description = "weather-app-ecs-sg"
+  vpc_id      = var.vpc_id
+
+  ingress = [
+    {
+      description      = "ECS"
+      from_port        = 3000
+      to_port          = 3000
+      protocol         = "tcp"
+      security_groups  = [var.alb_sg_id]
+      cidr_blocks      = []
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      self = false
+    }
+  ]
+
+  egress = [
+    {
+      description      = ""
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      security_groups  = []
+      self = false
+    }
+  ]
+
+  tags = {
+    Name = "${var.name_prefix}-weather-app-ecs-sg"
+  }
+}
+
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.name_prefix}-weather-app-cluster"
 
@@ -42,7 +80,7 @@ resource "aws_ecs_service" "ecs_service" {
 
   network_configuration {
       subnets         = var.private_subnets
-      security_groups = [var.ecs_sg_id]
+      security_groups = [aws_security_group.weather_app_ecs_sg.id]
   }
 
   load_balancer {

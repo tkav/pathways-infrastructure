@@ -15,7 +15,11 @@ variable "lb_target_group_arn" {
   default     = ""
 }
 
-variable "ecs_sg_id" {
+variable "vpc_id" {
+  default     = ""
+}
+
+variable "alb_sg_id" {
   default     = ""
 }
 
