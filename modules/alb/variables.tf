@@ -7,10 +7,6 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "alb_sg_id" {
-  default     = ""
-}
-
 variable "public_subnets" {
   type        = list
   default     = []
