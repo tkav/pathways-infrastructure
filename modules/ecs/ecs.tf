@@ -71,14 +71,14 @@ resource "aws_ecs_service" "ecs_service" {
   depends_on = [aws_ecs_task_definition.task_definition]
 
   network_configuration {
-      subnets         = var.private_subnets
+      subnets         = var.subnets
       security_groups = [aws_security_group.weather_app_ecs_sg.id]
   }
 
   load_balancer {
     target_group_arn = var.lb_target_group_arn
     container_name   = "${var.name_prefix}-weather-app"
-    container_port   = 3000
+    container_port   = var.port
   }
 
 }
