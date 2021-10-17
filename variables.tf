@@ -92,7 +92,7 @@ variable "desired_count" {
 variable "port" {
   type        = number
   description = "ECS container port."
-  default     = 1
+  default     = 3000
   validation {
     condition     = var.port > 0
     error_message = "Must provide a valid container port."
