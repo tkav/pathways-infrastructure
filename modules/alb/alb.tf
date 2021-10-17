@@ -54,7 +54,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.weather_app_alb_sg.id]
-  subnets            = var.public_subnets
+  subnets            = var.subnets
 
   # access_logs {
   #   bucket  = var.log_bucket

@@ -36,7 +36,7 @@ module "alb" {
   source          = "./modules/alb"
   name_prefix     = local.author_username
   vpc_id          = module.network.vpc_id
-  public_subnets  = slice(module.network.public_subnets, 0, 2)
+  subnets         = slice(module.network.public_subnets, 0, 2)
   log_bucket      = module.s3_bucket.s3_bucket_name
 
   depends_on = [module.network, module.s3_bucket]
@@ -54,12 +54,12 @@ module "ecs" {
   lb_target_group_arn = module.alb.lb_target_group_arn
   vpc_id              = module.network.vpc_id
   alb_sg_id           = module.alb.alb_sg_id
-  private_subnets     = slice(module.network.private_subnets, 0, 2)
+  subnets             = slice(module.network.private_subnets, 0, 2)
 
-  desired_count = 1
-  port          = 3000
-  memory        = 512
-  cpu           = 256
+  desired_count = var.desired_count
+  port          = var.port
+  memory        = var.memory
+  cpu           = var.cpu
 
   depends_on = [module.ecr_repo, module.alb, aws_cloudwatch_log_group.cloudwatch_group]
 
