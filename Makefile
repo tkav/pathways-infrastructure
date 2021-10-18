@@ -48,3 +48,7 @@ destroy_apply:
 list_bucket: 
 	$(COMPOSE_RUN_AWS) s3 ls
 
+.PHONY: push_image_to_ecr
+push_image_to_ecr:
+	./scripts/push_image_to_ecr.sh
+
