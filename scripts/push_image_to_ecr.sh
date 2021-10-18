@@ -1,7 +1,7 @@
 #!/bin/bash
 ECR_IMAGE_TAG=latest
 ALB_DNS_NAME=$(aws ssm get-parameter --name ${ALB_DNS_PARAMETER_NAME} --region ${REGION} --output text --query Parameter.Value)
-IMAGE_META="$( aws ecr list-images --repository-name=$ECR_REPO_NAME --region=$REGION 2> /dev/null )"
+IMAGE_META="$( aws ecr batch-get-image --repository-name=$ECR_REPO_NAME --image-ids=imageTag=$ECR_IMAGE_TAG --region=$REGION --output text )"
 
 if [[ $? == 0 ]]; then
     IMAGE_TAGS="$( echo ${IMAGE_META} | jq '.imageDetails[0].imageTags[0]' -r )"
