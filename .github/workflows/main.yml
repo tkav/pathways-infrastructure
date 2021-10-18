@@ -55,6 +55,7 @@ jobs:
       ECR_REPO_NAME:  ${{ secrets.ECR_REPO_NAME }} 
       APP_REPO_PERSONAL_ACCESS_TOKEN:  ${{ secrets.APP_REPO_PERSONAL_ACCESS_TOKEN }} 
       ALB_DNS_PARAMETER_NAME:  ${{ secrets.ALB_DNS_PARAMETER_NAME }} 
+      SLACK_WEBHOOK:  ${{ secrets.SLACK_WEBHOOK }} 
     steps:
     - uses: actions/checkout@v2
     - name: Push_ECR_Image
