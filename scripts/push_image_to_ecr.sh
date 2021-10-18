@@ -1,6 +1,6 @@
 #!/bin/bash
 ECR_IMAGE_TAG=latest
-IMAGE_META="$( aws ecr list-images --repository-name=$ECR_REPO_NAME --image-ids=imageTag=$ECR_IMAGE_TAG --region=$REGION 2> /dev/null )"
+IMAGE_META="$( aws ecr list-images --repository-name=$ECR_REPO_NAME --region=$REGION 2> /dev/null )"
 
 if [[ $? == 0 ]]; then
     IMAGE_TAGS="$( echo ${IMAGE_META} | jq '.imageDetails[0].imageTags[0]' -r )"
