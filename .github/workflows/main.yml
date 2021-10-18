@@ -18,8 +18,11 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }} 
+      SLACK_WEBHOOK:  ${{ secrets.SLACK_WEBHOOK }} 
     steps:
     - uses: actions/checkout@v2
+    - name: Notify_Slack
+      run: ./scripts/slack_notify.sh "Deploying Infrastructure"
     - name: Terraform_Plan
       run: make run_plan       
 
