@@ -6,7 +6,7 @@ ALB_DNS_NAME=$(aws ssm get-parameter --name ${ALB_DNS_PARAMETER_NAME} --region $
 echo $IMAGE_META
 IMAGE_TAGS="$( echo ${IMAGE_META} | jq '.imageDetails[0].imageTags[0]' -r )"
 
-if [[ $IMAGE_META != null && $IMAGE_TAGS == null ]]; then
+if [[ $IMAGE_META != '{ "imageIds": [] }' ]]; then
     echo "$ECR_REPO_NAME:$ECR_IMAGE_TAG found"
     curl -X POST -H 'Content-type: application/json' --data '{"text":"ECR image exists. App should be available at '"$ALB_DNS_NAME"'"}' $SLACK_WEBHOOK
 else
