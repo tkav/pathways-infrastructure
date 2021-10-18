@@ -77,3 +77,12 @@ resource "aws_lb_listener" "alb_listener" {
   }
 
 }
+
+resource "aws_ssm_parameter" "save_alb_dns_name" {
+  name  = "/${var.name_prefix}/node-weather-app/alb/dns-name"
+  type  = "String"
+  value = aws_lb.alb.dns_name
+
+  tags = var.tags
+
+}
