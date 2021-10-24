@@ -1,8 +1,4 @@
 
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
 resource "aws_vpc" "vpc" {
   cidr_block       = "${var.vpc_cidr_block}"
   instance_tenancy = "default"
@@ -60,7 +56,7 @@ resource "aws_nat_gateway" "natgw" {
   subnet_id     = aws_subnet.public_subnet[count.index].id
 
   tags = {
-    Name = "${var.project_prefix}-nat-gw-${count.index}"
+    Name = "${var.project_prefix}-nat-gw-${var.subnet_suffix[count.index]}"
   }
 
   depends_on = [aws_internet_gateway.gw]
@@ -78,7 +74,7 @@ resource "aws_route_table" "public" {
   depends_on = [aws_internet_gateway.gw]
 
   tags = {
-    Name = "${var.project_prefix}-public-${count.index}"
+    Name = "${var.project_prefix}-public-${var.subnet_suffix[count.index]}"
   }
 }
 
@@ -105,7 +101,7 @@ resource "aws_route_table" "private" {
   depends_on = [aws_nat_gateway.natgw]
 
   tags = {
-    Name = "${var.project_prefix}-private-${count.index}"
+    Name = "${var.project_prefix}-private-${var.subnet_suffix[count.index]}"
   }
 }
 
